@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = 'https://qr-4z80.onrender.com/api';
 
 class ApiService {
   constructor() {
