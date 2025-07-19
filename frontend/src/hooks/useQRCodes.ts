@@ -16,13 +16,18 @@ export const useQRCodes = (userId: string | null) => {
   }, [userId]);
 
   const loadQRCodes = async () => {
-    if (!userId) return;
+    if (!userId) {
+      console.log('loadQRCodes: No userId provided, skipping load');
+      return;
+    }
     
+    console.log('loadQRCodes: Loading QR codes for userId:', userId);
     setLoading(true);
     setError(null);
     
     try {
       const response = await ApiService.getQRCodes();
+      console.log('loadQRCodes: API response:', response);
       if (response.success) {
         const mappedQRCodes = response.data.map((qr: any) => ({
           id: qr._id, // backend uses _id
@@ -38,9 +43,11 @@ export const useQRCodes = (userId: string | null) => {
           category: qr.category,
           isFavorite: qr.isFavorite || false
         }));
+        console.log('loadQRCodes: Mapped QR codes:', mappedQRCodes);
         setQrCodes(mappedQRCodes);
       }
     } catch (err: any) {
+      console.error('loadQRCodes: Error loading QR codes:', err);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -48,7 +55,13 @@ export const useQRCodes = (userId: string | null) => {
   };
 
   const saveQRCode = async (qrData: Omit<QRCodeData, 'id' | 'createdAt'>) => {
-    if (!userId) return null;
+    if (!userId) {
+      console.log('saveQRCode: No userId provided, cannot save');
+      return null;
+    }
+    
+    console.log('saveQRCode: Saving QR code with data:', qrData);
+    console.log('saveQRCode: User ID:', userId);
     
     try {
       const response = await ApiService.createQRCode({
@@ -64,12 +77,16 @@ export const useQRCodes = (userId: string | null) => {
         userId // <-- Add userId to payload
       });
       
+      console.log('saveQRCode: API response:', response);
+      
       if (response.success) {
+        console.log('saveQRCode: Successfully saved, refreshing QR codes...');
         await loadQRCodes(); // Refresh the list
         return response.data;
       }
       return null;
     } catch (err: any) {
+      console.error('saveQRCode: Error saving QR code:', err);
       setError(err.message);
       return null;
     }

@@ -28,9 +28,15 @@ function App() {
   } = useQRCodes(auth.user?.id || null);
 
   const handleSaveQRCode = async (qrData: Omit<QRCodeData, 'id' | 'createdAt'>) => {
+    console.log('handleSaveQRCode called with:', qrData);
+    console.log('Auth status:', { isAuthenticated: auth.isAuthenticated, userId: auth.user?.id });
+    
     if (auth.isAuthenticated) {
-      await saveQRCode(qrData);
+      console.log('User is authenticated, saving QR code...');
+      const result = await saveQRCode(qrData);
+      console.log('Save result:', result);
     } else {
+      console.log('User not authenticated, showing auth modal');
       // For non-authenticated users, show auth modal
       setShowAuthModal(true);
     }

@@ -5,7 +5,7 @@ const auth = require('../middleware/auth');
 const router = express.Router();
 
 // Get all QR codes for authenticated user
-router.get('/', auth, async (req, res) => {
+router.get('/', auth.auth, async (req, res) => {
   try {
     const { page = 1, limit = 50, type, search, favorite } = req.query;
     const query = { userId: req.user._id };
@@ -52,7 +52,7 @@ router.get('/', auth, async (req, res) => {
 });
 
 // Create new QR code
-router.post('/', auth, async (req, res) => {
+router.post('/', auth.auth, async (req, res) => {
   try {
     const qrCodeData = {
       ...req.body,
@@ -77,7 +77,7 @@ router.post('/', auth, async (req, res) => {
 });
 
 // Get single QR code
-router.get('/:id', auth, async (req, res) => {
+router.get('/:id', auth.auth, async (req, res) => {
   try {
     const qrCode = await QRCode.findOne({
       _id: req.params.id,
@@ -105,7 +105,7 @@ router.get('/:id', auth, async (req, res) => {
 });
 
 // Update QR code
-router.put('/:id', auth, async (req, res) => {
+router.put('/:id', auth.auth, async (req, res) => {
   try {
     const qrCode = await QRCode.findOneAndUpdate(
       { _id: req.params.id, userId: req.user._id },
@@ -135,7 +135,7 @@ router.put('/:id', auth, async (req, res) => {
 });
 
 // Delete QR code
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', auth.auth, async (req, res) => {
   try {
     const qrCode = await QRCode.findOneAndDelete({
       _id: req.params.id,
@@ -163,7 +163,7 @@ router.delete('/:id', auth, async (req, res) => {
 });
 
 // Delete all QR codes for user
-router.delete('/', auth, async (req, res) => {
+router.delete('/', auth.auth, async (req, res) => {
   try {
     const result = await QRCode.deleteMany({ userId: req.user._id });
 
@@ -181,7 +181,7 @@ router.delete('/', auth, async (req, res) => {
 });
 
 // Toggle favorite status
-router.patch('/:id/favorite', auth, async (req, res) => {
+router.patch('/:id/favorite', auth.auth, async (req, res) => {
   try {
     const qrCode = await QRCode.findOne({
       _id: req.params.id,
@@ -213,7 +213,7 @@ router.patch('/:id/favorite', auth, async (req, res) => {
 });
 
 // Get QR code statistics
-router.get('/stats/overview', auth, async (req, res) => {
+router.get('/stats/overview', auth.auth, async (req, res) => {
   try {
     const stats = await QRCode.aggregate([
       { $match: { userId: req.user._id } },

@@ -10,7 +10,7 @@ export class AuthService {
         options: {
           data: {
             name,
-            avatar_url: `https:/https://qr-4z80.onrender.com/api.dicebear.com/7.x/avataaars/svg?seed=${email}`
+            avatar_url: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`
           }
         }
       });
@@ -22,7 +22,7 @@ export class AuthService {
         await this.createUserProfile(data.user.id, {
           email,
           name,
-          avatar_url: `https:/https://qr-4z80.onrender.com/api.dicebear.com/7.x/avataaars/svg?seed=${email}`,
+          avatar_url: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`,
           preferences: {
             theme: 'light',
             defaultQRSize: 300,

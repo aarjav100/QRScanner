@@ -139,7 +139,7 @@ router.post('/login', async (req, res) => {
 });
 
 // Get current user
-router.get('/me', auth, async (req, res) => {
+router.get('/me', auth.auth, async (req, res) => {
   try {
     res.json({
       success: true,
@@ -162,7 +162,7 @@ router.get('/me', auth, async (req, res) => {
 });
 
 // Update user profile
-router.put('/profile', auth, async (req, res) => {
+router.put('/profile', auth.auth, async (req, res) => {
   try {
     const { name, email, preferences } = req.body;
     const updates = {};
